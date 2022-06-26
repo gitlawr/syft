@@ -146,9 +146,9 @@ func (p *scaffoldingParser) parseMaven(ctx context.Context) (pkgs []*pkg.Package
 		return nil, nil, fmt.Errorf("error creating maven transitive dependencies discovery: %w", err)
 	}
 	dependenciesCmd.Dir = p.currentDirpath
-	err = dependenciesCmd.Run()
+	output, err := dependenciesCmd.CombinedOutput()
 	if err != nil {
-		return nil, nil, fmt.Errorf("error running maven transitive dependencies discovery: %w", err)
+		return nil, nil, fmt.Errorf("error running maven transitive dependencies discovery: %v,%w", string(output), err)
 	}
 
 	var dependenciesCmdOutputScanner = bufio.NewScanner(dependenciesCmdOutputFile)
